@@ -55,4 +55,5 @@ Project git repositories
 
 How to run the roject:
 1. clone project
-2. index.html is the home or landing page
+   git clone https://github.com/flyingfalcon99/simplilearn-fsd-online-food-ordering-app-project-1
+3. index.html is the home or landing page
