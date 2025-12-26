@@ -51,7 +51,7 @@ Iteration #3
 - Fixed issues and minor enhancements
 
 Project git repositories
-1. link:
+1. link: https://github.com/flyingfalcon99/simplilearn-fsd-online-food-ordering-app-project-1
 
 How to run the roject:
 1. clone project
