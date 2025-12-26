@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Online Food Ordering App</title>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-slate-50 text-slate-900">
+    <!-- Top Bar -->
+    <header class="sticky top-0 z-20 border-b bg-white/80 backdrop-blur">
+      <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
+        <div class="flex items-center gap-3">
+          <a href="index.html" class="grid h-10 w-10 place-items-center rounded-2xl bg-slate-900 text-white font-bold">🍔</a>
+          <div>
+            <h1 class="text-lg font-semibold leading-tight">MyFoodieJunction</h1>
+            <p class="text-xs text-slate-500 -mt-0.5">Online Food Ordering Application</p>
+          </div>
+        </div>
+
+        <nav class="hidden md:flex items-center gap-4">
+          <a href="index.html" class="text-sm font-medium hover:underline">Home</a>
+          <a href="about.html" class="text-sm font-medium hover:underline">About</a>
+        </nav>
+
+        <div class="flex items-center gap-3">
+          <div id="authLinks" class="flex items-center gap-2">
+            <a id="linkSignIn" href="signin.html" class="text-sm hover:underline">Sign In</a>
+          </div>
+
+          <!-- Mode buttons (restored for app.js) -->
+          <div class="hidden sm:flex items-center gap-2">
+            <button id="btnCustomerMode" class="rounded-xl border px-3 py-2 text-sm font-medium hover:bg-slate-50">Customer</button>
+            <button id="btnAdminMode" class="rounded-xl border px-3 py-2 text-sm font-medium hover:bg-slate-50">Admin</button>
+          </div>
+
+          <div id="currentUserDisplay" class="hidden items-center gap-2 rounded-xl border px-3 py-2 text-sm font-medium">
+            <span id="currentUserEmail" class="text-sm font-medium text-slate-700">Guest</span>
+            <span id="currentUserBadge" class="hidden ml-2 inline-block rounded-full bg-amber-100 text-amber-800 px-2 py-0.5 text-xs font-medium">Admin</span>
+            <button id="btnLogout" class="ml-2 rounded-xl border px-2 py-1 text-sm hover:bg-slate-50">Logout</button>
+          </div>
+
+          <div class="ml-2 hidden sm:block h-8 w-px bg-slate-200"></div>
+
+          <button id="btnOpenCart"
+            class="relative rounded-xl bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800">
+            Cart
+            <span id="cartCount"
+              class="ml-2 inline-flex min-w-[1.75rem] items-center justify-center rounded-full bg-white/15 px-2 text-xs">0</span>
+          </button>
+        </div>
+      </div>
+    </header>"
+
+    <!-- Main -->
+    <main class="mx-auto max-w-6xl px-4 py-6">
+      <!-- Hero -->
+      <section class="mb-6 rounded-2xl border bg-white p-8">
+        <div class="grid gap-6 md:grid-cols-2 items-center">
+          <div>
+            <h1 class="text-3xl font-extrabold">Delicious food, delivered fast 🍽️</h1>
+            <p class="mt-3 text-slate-600">Browse local favorites, order in seconds, and enjoy at home. Sign in to save orders and access admin tools.</p>
+            <div class="mt-4 flex gap-3">
+              <a href="#menuGrid" class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">Order Now</a>
+              <a href="about.html" class="rounded-xl border px-4 py-2 text-sm font-medium hover:bg-slate-50">Learn More</a>
+            </div>
+          </div>
+          <div class="hidden md:block">
+            <div class="rounded-2xl border bg-slate-50 p-6 text-center">🍕 🍔 🍜 🥗</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Mode Banner -->
+      <div class="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border bg-white p-4">
+        <div>
+          <p class="text-xs uppercase tracking-wide text-slate-500">Mode</p>
+          <h2 id="modeTitle" class="text-xl font-semibold">Customer Experience</h2>
+          <p id="modeSubtitle" class="text-sm text-slate-600">
+            Browse the menu, add items to cart, and checkout.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <button id="btnOpenProfile"
+            class="rounded-xl border px-3 py-2 text-sm font-medium hover:bg-slate-50">
+            Profile
+          </button>
+          <button id="btnOpenOrders"
+            class="rounded-xl border px-3 py-2 text-sm font-medium hover:bg-slate-50">
+            My Orders
+          </button>
+        </div>
+      </div>
+
+      <!-- Customer Panel -->
+      <section id="customerPanel" class="space-y-4">
+        <!-- Search + Filters -->
+        <div class="grid gap-3 rounded-2xl border bg-white p-4 md:grid-cols-12">
+          <div class="md:col-span-6">
+            <label class="text-sm font-medium">Search menu</label>
+            <input id="searchInput" type="text" placeholder="e.g., burger, pizza, salad..."
+              class="mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-900/10" />
+          </div>
+
+          <div class="md:col-span-3">
+            <label class="text-sm font-medium">Category</label>
+            <select id="categorySelect"
+              class="mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-900/10">
+              <option value="all">All</option>
+            </select>
+          </div>
+
+          <div class="md:col-span-3">
+            <label class="text-sm font-medium">Sort</label>
+            <select id="sortSelect"
+              class="mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-900/10">
+              <option value="featured">Featured</option>
+              <option value="priceAsc">Price: Low → High</option>
+              <option value="priceDesc">Price: High → Low</option>
+              <option value="ratingDesc">Rating: High → Low</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Menu Grid -->
+        <div>
+          <div class="mb-2 flex items-center justify-between">
+            <h3 class="text-lg font-semibold">Menu</h3>
+            <p id="menuMeta" class="text-sm text-slate-500"></p>
+          </div>
+
+          <div id="menuGrid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+        </div>
+      </section>
+
+      <!-- Admin Panel -->
+      <section id="adminPanel" class="hidden space-y-4">
+        <div class="rounded-2xl border bg-white p-4">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h3 class="text-lg font-semibold">Admin Dashboard <span class="ml-2 inline-block rounded-full bg-amber-100 text-amber-800 px-2 py-0.5 text-xs font-medium">Admin</span></h3>
+              <p class="text-sm text-slate-600">Manage menu items and track orders.</p>
+            </div>
+            <button id="btnOpenAdminAdd"
+              class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
+              + Add Menu Item
+            </button>
+          </div>
+        </div>
+
+        <!-- Admin Menu Table -->
+        <div class="rounded-2xl border bg-white p-4">
+          <div class="mb-3 flex items-center justify-between">
+            <h4 class="font-semibold">Menu Management</h4>
+            <p class="text-sm text-slate-500" id="adminMenuMeta"></p>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="text-slate-600">
+                <tr class="border-b">
+                  <th class="py-2 pr-3">Item</th>
+                  <th class="py-2 pr-3">Category</th>
+                  <th class="py-2 pr-3">Price</th>
+                  <th class="py-2 pr-3">Rating</th>
+                  <th class="py-2 pr-3">Available</th>
+                  <th class="py-2 pr-3 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminMenuTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Admin Orders Table -->
+        <div class="rounded-2xl border bg-white p-4">
+          <div class="mb-3 flex items-center justify-between">
+            <h4 class="font-semibold">Order Tracking</h4>
+            <p class="text-sm text-slate-500" id="adminOrdersMeta"></p>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="text-slate-600">
+                <tr class="border-b">
+                  <th class="py-2 pr-3">Order</th>
+                  <th class="py-2 pr-3">Customer</th>
+                  <th class="py-2 pr-3">Items</th>
+                  <th class="py-2 pr-3">Total</th>
+                  <th class="py-2 pr-3">Status</th>
+                  <th class="py-2 pr-3 text-right">Update</th>
+                </tr>
+              </thead>
+              <tbody id="adminOrdersTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Cart Drawer -->
+    <div id="cartDrawer" class="fixed inset-0 z-30 hidden">
+      <div class="absolute inset-0 bg-black/40" data-close="cart"></div>
+      <aside class="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-xl">
+        <div class="flex items-center justify-between border-b p-4">
+          <h3 class="text-lg font-semibold">Your Cart</h3>
+          <button class="rounded-xl border px-3 py-2 text-sm hover:bg-slate-50" data-close="cart">Close</button>
+        </div>
+
+        <div class="p-4 space-y-4">
+          <div id="cartItems" class="space-y-3"></div>
+
+          <div class="rounded-2xl border bg-slate-50 p-4 space-y-2">
+            <div class="flex items-center justify-between text-sm">
+              <span class="text-slate-600">Subtotal</span>
+              <span id="cartSubtotal" class="font-medium">$0.00</span>
+            </div>
+            <div class="flex items-center justify-between text-sm">
+              <span class="text-slate-600">Tax (8%)</span>
+              <span id="cartTax" class="font-medium">$0.00</span>
+            </div>
+            <div class="flex items-center justify-between text-base">
+              <span class="font-semibold">Total</span>
+              <span id="cartTotal" class="font-semibold">$0.00</span>
+            </div>
+
+            <button id="btnCheckout"
+              class="mt-2 w-full rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
+              Checkout
+            </button>
+            <button id="btnClearCart"
+              class="w-full rounded-xl border px-4 py-2 text-sm font-medium hover:bg-white">
+              Clear Cart
+            </button>
+          </div>
+
+          <p class="text-xs text-slate-500">
+            Demo payment: checkout simulates payment and creates an order.
+          </p>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profileModal" class="fixed inset-0 z-30 hidden">
+      <div class="absolute inset-0 bg-black/40" data-close="profile"></div>
+      <div class="absolute left-1/2 top-1/2 w-[92%] max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white shadow-xl">
+        <div class="flex items-center justify-between border-b p-4">
+          <h3 class="text-lg font-semibold">Profile</h3>
+          <button class="rounded-xl border px-3 py-2 text-sm hover:bg-slate-50" data-close="profile">Close</button>
+        </div>
+
+        <form id="profileForm" class="p-4 space-y-3">
+          <div class="grid gap-3 sm:grid-cols-2">
+            <div>
+              <label class="text-sm font-medium">Full Name</label>
+              <input id="profileName" required
+                class="mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-900/10"
+                placeholder="Jane Doe" />
+            </div>
+            <div>
+              <label class="text-sm font-medium">Phone</label>
+              <input id="profilePhone"
+                class="mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-900/10"
+                placeholder="(555) 123-4567" />
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-medium">Address</label>
+            <textarea id="profileAddress" rows="3"
+              class="mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-900/10"
+              placeholder="123 Main St, City, State"></textarea>
+          </div>
+
+          <div class="flex items-center justify-end gap-2 pt-2">
+            <button type="button" id="btnResetDemo"
+              class="rounded-xl border px-3 py-2 text-sm font-medium hover:bg-slate-50">
+              Reset Demo Data
+            </button>
+            <button type="submit"
+              class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
+              Save Profile
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Orders Modal (Customer) -->
+    <div id="ordersModal" class="fixed inset-0 z-30 hidden">
+      <div class="absolute inset-0 bg-black/40" data-close="orders"></div>
+      <div class="absolute left-1/2 top-1/2 w-[92%] max-w-3xl -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white shadow-xl">
+        <div class="flex items-center justify-between border-b p-4">
+          <h3 class="text-lg font-semibold">My Orders</h3>
+          <button class="rounded-xl border px-3 py-2 text-sm hover:bg-slate-50" data-close="orders">Close</button>
+        </div>
+
+        <div class="p-4">
+          <div id="myOrdersList" class="space-y-3"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Add/Edit Modal -->
+    <div id="adminItemModal" class="fixed inset-0 z-30 hidden">
+      <div class="absolute inset-0 bg-black/40" data-close="adminItem"></div>
+      <div class="absolute left-1/2 top-1/2 w-[92%] max-w-xl -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white shadow-xl">
+        <div class="flex items-center justify-between border-b p-4">
+          <h3 id="adminItemModalTitle" class="text-lg font-semibold">Add Menu Item</h3>
+          <button class="rounded-xl border px-3 py-2 text-sm hover:bg-slate-50" data-close="adminItem">Close</button>
+        </div>
+
+        <form id="adminItemForm" class="p-4 space-y-3">
+          <input type="hidden" id="adminItemId" />
+
+          <div class="grid gap-3 sm:grid-cols-2">
+            <div>
+              <label class="text-sm font-medium">Name</label>
+              <input id="adminItemName" required
+                class="mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-900/10"
+                placeholder="Spicy Chicken Burger" />
+            </div>
+
+            <div>
+              <label class="text-sm font-medium">Category</label>
+              <input id="adminItemCategory" required
+                class="mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-900/10"
+                placeholder="Burgers" />
+            </div>
+          </div>
+
+          <div class="grid gap-3 sm:grid-cols-3">
+            <div>
+              <label class="text-sm font-medium">Price ($)</label>
+              <input id="adminItemPrice" required type="number" step="0.01" min="0"
+                class="mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-900/10"
+                placeholder="9.99" />
+            </div>
+
+            <div>
+              <label class="text-sm font-medium">Rating (0–5)</label>
+              <input id="adminItemRating" required type="number" step="0.1" min="0" max="5"
+                class="mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-900/10"
+                placeholder="4.5" />
+            </div>
+
+            <div>
+              <label class="text-sm font-medium">Available</label>
+              <select id="adminItemAvailable"
+                class="mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-900/10">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-medium">Description</label>
+            <textarea id="adminItemDesc" rows="3"
+              class="mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-900/10"
+              placeholder="Short description for customers..."></textarea>
+          </div>
+
+          <div>
+            <label class="text-sm font-medium">Image Emoji (optional)</label>
+            <input id="adminItemEmoji"
+              class="mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-900/10"
+              placeholder="🍕 🍜 🥗" />
+          </div>
+
+          <div class="flex items-center justify-end gap-2 pt-2">
+            <button type="button" id="btnAdminItemCancel"
+              class="rounded-xl border px-3 py-2 text-sm font-medium hover:bg-slate-50">
+              Cancel
+            </button>
+            <button type="submit"
+              class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <footer class="mx-auto max-w-6xl px-4 pb-8 pt-2 text-center text-xs text-slate-500">
+      Built with HTML + Tailwind + JavaScript • Demo uses localStorage (no backend)
+    </footer>
+
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

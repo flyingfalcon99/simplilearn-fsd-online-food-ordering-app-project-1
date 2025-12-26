@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About - MyFoodieJunction</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-slate-50 text-slate-900">
+    <header class="sticky top-0 z-20 border-b bg-white/80 backdrop-blur">
+      <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
+        <div class="flex items-center gap-3">
+          <a href="index.html" class="grid h-10 w-10 place-items-center rounded-2xl bg-slate-900 text-white font-bold">🍔</a>
+          <div>
+            <h1 class="text-lg font-semibold leading-tight">MyFoodieJunction</h1>
+            <p class="text-xs text-slate-500 -mt-0.5">About us</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div id="authLinks" class="hidden">
+            <a id="linkSignIn" href="signin.html" class="text-sm hover:underline">Sign In</a>
+          </div>
+
+          <div id="currentUserDisplay" class="hidden items-center gap-2 rounded-xl border px-3 py-2 text-sm font-medium">
+            <span id="currentUserEmail" class="text-sm font-medium text-slate-700">Guest</span>
+            <button id="btnLogout" class="ml-2 rounded-xl border px-2 py-1 text-sm hover:bg-slate-50">Logout</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-4xl px-4 py-10">
+      <div class="rounded-2xl border bg-white p-6">
+        <h1 class="text-2xl font-semibold">About MyFoodieJunction</h1>
+        <p class="mt-4 text-slate-600">MyFoodieJunction is a demo app to illustrate front-end patterns: localStorage persistence, a simple cart, user profiles, and a small admin dashboard. Admin user is <code>admin@myfoodiejunction.com</code> (demo password: <strong>adminpass</strong>).</p>
+        <p class="mt-3 text-slate-600">This demo supports guest checkout, sign-up/sign-in, and admin-only menu management features.</p>
+      </div>
+    </main>
+
+    <footer class="mx-auto max-w-6xl px-4 pb-8 pt-2 text-center text-xs text-slate-500">
+      Demo uses localStorage (no backend)
+    </footer>
+
+    <script src="auth.js"></script>
+  </body>
+</html>
